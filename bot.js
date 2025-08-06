@@ -10,12 +10,12 @@ const token = process.env.TOKEN;
 // Modo polling (fica escutando mensagens)
 const bot = new TelegramBot(token, { polling: true });
 
+// Define os comandos do bot
 bot.setMyCommands([
     { command: '/start', description: 'Inicia o bot' },
     { command: '/carreiras', description: 'Mostra cursos e áreas de TI' },
-    { command: '/ajuda', description: 'Lista comandos disponíveis' }
+    { command: '/livros', description: 'Livros que indico' }
 ]);
-
 
 // Comando /carreiras
 bot.onText(/\/carreiras/, (msg) => {
@@ -52,4 +52,24 @@ Extra: AWS, Azure, Docker, K8s
     `;
 
     bot.sendMessage(chatId, resposta, { parse_mode: 'Markdown' });
+});
+
+// Comando /livros
+bot.onText(/\/livros/, (msg) => {
+    const chatId = msg.chat.id;
+
+    const livros = `
+📚 *Livros recomendados para devs:*
+
+1. *Clean Code*  
+   Autor: Robert C. Martin  
+
+2. *Clean Architecture*  
+   Autor: Robert C. Martin  
+
+3. *O Programador Pragmático*  
+   Autores: Andrew Hunt e David Thomas
+    `;
+
+    bot.sendMessage(chatId, livros, { parse_mode: 'Markdown' });
 });
