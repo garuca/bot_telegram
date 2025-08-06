@@ -10,6 +10,13 @@ const token = process.env.TOKEN;
 // Modo polling (fica escutando mensagens)
 const bot = new TelegramBot(token, { polling: true });
 
+bot.setMyCommands([
+    { command: '/start', description: 'Inicia o bot' },
+    { command: '/carreiras', description: 'Mostra cursos e áreas de TI' },
+    { command: '/ajuda', description: 'Lista comandos disponíveis' }
+]);
+
+
 // Comando /carreiras
 bot.onText(/\/carreiras/, (msg) => {
     const chatId = msg.chat.id;
