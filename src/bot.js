@@ -6,6 +6,9 @@ import { fileURLToPath, pathToFileURL } from 'url';
 
 
 import { carreirasInfo } from './data/carreirasData.js';
+import { livrosRecomendados } from './data/livrosData.js';
+
+import { options as carreirasOptions } from './commands/carreiras.js';
 
 dotenv.config();
 const token = process.env.TOKEN;
@@ -28,7 +31,6 @@ const commandsPath = path.join(__dirname, 'commands');
         const commandModules = await Promise.all(
             commandFiles
                 .filter(file => file.endsWith('.js'))
-                
                 .map(file => import(pathToFileURL(path.join(commandsPath, file))))
         );
         
@@ -50,17 +52,38 @@ const commandsPath = path.join(__dirname, 'commands');
 })();
 
 
+
+
 bot.on('callback_query', async (callbackQuery) => {
     const msg = callbackQuery.message;
     const data = callbackQuery.data; 
     const chatId = msg.chat.id;
 
-    const carreiraKey = data.split('_')[1];
-    const resposta = carreirasInfo[carreiraKey] || 'Desculpe, informação não encontrada.';
-
     try {
-        await bot.sendMessage(chatId, resposta, { parse_mode: 'Markdown' });
+        
+        if (data === 'menu_carreiras') {
+
+            const introMessage = "Qual área de TI você gostaria de conhecer?";
+            await bot.sendMessage(chatId, introMessage, carreirasOptions);
+
+        } else if (data === 'menu_livros') {
+            
+            let responseMessage = "📚 *Livros essenciais que todo dev deveria ler:*\n";
+            livrosRecomendados.forEach((livro, index) => {
+                responseMessage += `\n${index + 1}. *${livro.titulo}*\n   Autor: ${livro.autor}\n`;
+            });
+            await bot.sendMessage(chatId, responseMessage, { parse_mode: 'Markdown' });
+
+        } else if (data.startsWith('carreira_')) {
+            
+            const carreiraKey = data.split('_')[1];
+            const resposta = carreirasInfo[carreiraKey] || 'Desculpe, informação não encontrada.';
+            await bot.sendMessage(chatId, resposta, { parse_mode: 'Markdown' });
+        }
+
+        
         await bot.answerCallbackQuery(callbackQuery.id);
+
     } catch (error) {
         console.error('Erro no callback_query:', error.message);
     }

@@ -5,14 +5,20 @@ export const command = {
     handler: async (bot, msg) => {
         const chatId = msg.chat.id;
         const welcomeMessage = `
-👋 *Olá garuco!*
+👋 *Fala Comigo!*
 
-Sou um bot para ajudar você a navegar pelo mundo da Tecnologia.
-
-Use os seguintes comandos:
-/carreiras - Para ver as principais áreas de forma interativa.
-/livros - Para receber recomendações de livros essenciais.
+Sou um bot para ajudar você a navegar pelo mundo da Tecnologia. Escolha uma das opções abaixo:
 `;
-        await bot.sendMessage(chatId, welcomeMessage, { parse_mode: 'Markdown' });
+        const options = {
+            reply_markup: {
+                inline_keyboard: [
+                    [{ text: '📚 Carreiras de TI', callback_data: 'menu_carreiras' }],
+                    [{ text: '📖 Livros Essenciais', callback_data: 'menu_livros' }]
+                ]
+            },
+            parse_mode: 'Markdown'
+        };
+
+        await bot.sendMessage(chatId, welcomeMessage, options);
     }
 };
