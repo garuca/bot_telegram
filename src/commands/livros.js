@@ -1,10 +1,4 @@
-
-import { livrosRecomendados } from '../data/livrosData.js';
-
-let responseMessage = "📚 *Livros essenciais que todo dev deveria ler:*\n";
-livrosRecomendados.forEach((livro, index) => {
-    responseMessage += `\n${index + 1}. *${livro.titulo}*\n   Autor: ${livro.autor}\n`;
-});
+import { livrosOpcoes } from '../data/livrosOpcoes.js';
 
 export const command = {
     command: 'livros',
@@ -12,6 +6,8 @@ export const command = {
     pattern: /\/livros/,
     handler: async (bot, msg) => {
         const chatId = msg.chat.id;
-        await bot.sendMessage(chatId, responseMessage, { parse_mode: 'Markdown' });
+        const message = "📚 *Livros essenciais que todo dev deveria ler:*";
+        
+        await bot.sendMessage(chatId, message, { ...livrosOpcoes, parse_mode: 'Markdown' });
     }
 };
